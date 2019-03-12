@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group 'us.edwardstx'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'org.assertj:assertj-core:3.12.0'
+    testCompile 'org.junit.jupiter:junit-jupiter:5.4.0'
+    testCompile group: 'org.assertj', name: 'assertj-vavr', version: '0.0.1'
+    compile 'io.vavr:vavr-jackson:0.10.0'
+    compile 'io.vavr:vavr:0.10.0'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+    compile group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
+
+}
