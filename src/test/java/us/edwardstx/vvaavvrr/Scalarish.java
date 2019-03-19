@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static io.vavr.API.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.vavr.api.VavrAssertions.assertThat;
 
 public class Scalarish {
 
@@ -69,7 +70,7 @@ public class Scalarish {
         }
         return None();
     }
-    
+
     @Test
     public void testVavrOption(){
         Option<Long> o1 = optionValue(1L)
@@ -121,10 +122,32 @@ public class Scalarish {
 
     @Test
     public void testVavrTry(){
-        Try<Long> l1 = tryDouble(3L);
-        String tried = l1
-                .map((l) -> "[" + l + "]")
+        Try<Long> l3 = tryDouble(3L);
+        String tried3 = l3
+                .map(l -> "[" + l + "]")
                 .getOrElse("none");
-        System.out.println("T2: " + tried);
+        System.out.println("T3: " + tried3);
+
+        assertThat(tried3).isEqualTo("none");
+        assertThat(l3).failReasonHasMessage("So bad :{");
+
+        Try<Long> l4 = tryDouble(4L);
+        String tried4 = l4
+                .map(l -> "[" + l + "]")
+                .getOrElse("none");
+        System.out.println("T4: " + tried4);
+
+        assertThat(tried4).isEqualTo("[8]");
+        assertThat(l4).contains(8L);
     }
+
+    public Try<Long> tryTriple(Long in){
+        if(in % 2 == 0) {
+            return Failure(new RuntimeException("So bad :{"));
+        }
+        return Success(in * 3);
+    }
+
+
+
 }
