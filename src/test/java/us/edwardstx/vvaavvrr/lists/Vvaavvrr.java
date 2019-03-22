@@ -4,16 +4,17 @@ import com.google.common.collect.ImmutableList;
 import io.vavr.collection.List;
 import org.junit.Test;
 
+import static io.vavr.API.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Vvaavvrr {
     @Test
     public void testVavrImutableCollections(){
-        List<String> src = List.of("one", "two", "three");
+        List<String> src = List("one", "two", "three");
 
         List<String> dst = src.map(String::toUpperCase);
 
-        System.out.println(dst);
+        println(dst);
 
         assertThat(src).containsExactly("one", "two", "three");
         assertThat(dst).containsExactly("ONE", "TWO", "THREE");
@@ -21,14 +22,14 @@ public class Vvaavvrr {
 
     @Test
     public void testVavrImutableCollectionsAppend(){
-        List<String> src = List.of("one", "two", "three");
+        List<String> src = List("one", "two", "three");
 
         List<String> dst = appendDefault1(src);
 
-        System.out.println(dst);
+        println(dst);
         assertThat(dst).containsExactly("one", "two", "three", "zero");
 
-        System.out.println(src);
+        println(src);
         assertThat(src).containsExactly("one", "two", "three");
     }
 
@@ -39,10 +40,10 @@ public class Vvaavvrr {
 
     @Test
     public void testVavrReduce(){
-        List<String> src = List.of("one", "two", "three");
+        List<String> src = List("one", "two", "three");
 
         String reduced = src.reduce((l,r) -> l + ", " + r);
-        System.out.println(reduced);
+        println(reduced);
 
         assertThat(reduced).isEqualTo("one, two, three");
 
@@ -53,17 +54,17 @@ public class Vvaavvrr {
 
     @Test
     public void testVavrFilter(){
-        List<String> src = List.of("one", "two", "three");
+        List<String> src = List("one", "two", "three");
 
         List<String> filtered = src.filter(s -> s.length() <= 3);
 
-        System.out.println(filtered);
+        println(filtered);
         assertThat(filtered).containsExactly("one", "two");
     }
 
     @Test
     public void testInterop(){
-        List<String> src = List.of("one", "two", "three");
+        List<String> src = List("one", "two", "three");
         java.util.List<String> java = ImmutableList.of("one", "two", "three");
 
         java.util.List<String> view = src.asJava();

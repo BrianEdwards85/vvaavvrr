@@ -12,7 +12,6 @@ import java.util.UUID;
 import static io.vavr.API.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class Destiny {
 
     public static Random random = new Random();
@@ -25,16 +24,6 @@ public class Destiny {
         return Future(() -> {
             Thread.sleep(delay());
             return UUID.randomUUID().toString();
-        });
-    }
-
-    public Future<String> capitilize(String string) {
-        return Future(() -> {
-            Thread.sleep(delay());
-            if (StringUtils.isAllBlank(string)) {
-                throw new IllegalArgumentException("Blank string not allowed");
-            }
-            return string.toUpperCase();
         });
     }
 
@@ -61,6 +50,15 @@ public class Destiny {
         println(f1.get());
     }
 
+    public Future<String> capitilize(String string) {
+        return Future(() -> {
+            Thread.sleep(delay());
+            if (StringUtils.isAllBlank(string)) {
+                throw new IllegalArgumentException("Blank string not allowed");
+            }
+            return string.toUpperCase();
+        });
+    }
 
     @Test
     public void flatMapFuture() {
@@ -90,7 +88,6 @@ public class Destiny {
         println(strings.mkString(", "));
     }
 
-
     @Test
     public void failureIsAlwaysAnOption() {
         Future<String> theFutureIsFail = capitilize("");
@@ -100,5 +97,54 @@ public class Destiny {
         assertThat(theFutureIsFail.isFailure());
     }
 
+    @Test
+    public void butYouShouldAlwaysRecover(){
+        Future<String> theFutureIsFail = capitilize("");
+        println("Returned");
+        assertThat(theFutureIsFail.isCompleted()).isFalse();
+
+        Future<String> mappedFuture = theFutureIsFail.map(s -> "[" + s + "]");
+
+        Future<String> orElse = mappedFuture.orElse(Future("I failed :("));
+        orElse.await();
+
+        String r = orElse.get();
+        assertThat(r).isEqualTo("I failed :(");
+        println(r);
+    }
+
+    @Test
+    public void successIsBetter(){
+        Future<String> theFutureIsNotFail = capitilize("abcde");
+        println("Returned");
+        assertThat(theFutureIsNotFail.isCompleted()).isFalse();
+
+        Future<String> mappedFuture = theFutureIsNotFail.map(s -> "[" + s + "]");
+
+        Future<String> orElse = mappedFuture.orElse(Future("I failed :("));
+        orElse.await();
+
+        String r = orElse.get();
+        assertThat(r).isEqualTo("[ABCDE]");
+        println(r);
+    }
+
+    @Test
+    public void explainYourself(){
+        Future<String> theFutureIsFail = capitilize("");
+        println("Returned");
+        assertThat(theFutureIsFail.isCompleted()).isFalse();
+
+        Future<String> recover = theFutureIsFail.recover(t -> {
+            return "I failed: " + t.getMessage();
+        });
+
+        recover.await();
+
+        String result = recover.get();
+        assertThat(result).isEqualTo("I failed: Blank string not allowed");
+        println(result);
+
+    }
 
 }

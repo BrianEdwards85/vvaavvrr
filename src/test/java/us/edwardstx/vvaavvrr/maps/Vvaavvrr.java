@@ -15,7 +15,7 @@ public class Vvaavvrr {
                 4, "Four",
                 5, "Five");
 
-        System.out.println(src);
+        println(src);
     }
 
     @Test
@@ -29,7 +29,7 @@ public class Vvaavvrr {
 
         Map<Integer, String> dst = src.put(6,"Six");
 
-        System.out.println(dst);
+        println(dst);
 
         assertThat(dst).containsAll(src);
         assertThat(dst).containsAll(Map(6,"Six"));
@@ -47,7 +47,7 @@ public class Vvaavvrr {
 
         Map<String, String> dst = src.map((key,value) -> Tuple("[" + key + "]", value));
 
-        System.out.println(dst);
+        println(dst);
     }
 
 
@@ -62,7 +62,7 @@ public class Vvaavvrr {
 
         Map<String,String> dst = src.mapKeys((key) -> "[" + key + "]");
 
-        System.out.println(dst);
+        println(dst);
     }
 
 
@@ -77,7 +77,7 @@ public class Vvaavvrr {
 
         Map<Integer, String> dst = src.filter((key,value) -> key % 2 == 0 );
 
-        System.out.println(dst);
+        println(dst);
     }
 
     @Test
@@ -91,6 +91,6 @@ public class Vvaavvrr {
 
         Map<Integer, String> dst = src.filter((key,value) -> value.length() == 4 );
 
-        System.out.println(dst);
+        println(dst);
     }
 }
