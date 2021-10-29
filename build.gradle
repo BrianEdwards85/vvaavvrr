@@ -21,5 +21,13 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
     compile group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
+    compile 'com.talanlabs:avatar-generator:1.1.0'
+    compile 'io.reactivex.rxjava3:rxjava:3.0.0-RC3'
+    compile group: 'org.apache.httpcomponents', name: 'httpasyncclient', version: '4.1.4'
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+	annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    compile group: 'org.apache.commons', name: 'commons-text', version: '1.8'
 
 }

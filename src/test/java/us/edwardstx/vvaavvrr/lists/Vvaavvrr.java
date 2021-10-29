@@ -1,8 +1,14 @@
 package us.edwardstx.vvaavvrr.lists;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import io.vavr.collection.List;
+import io.vavr.collection.Map;
+import io.vavr.jackson.datatype.VavrModule;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static io.vavr.API.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,9 +53,27 @@ public class Vvaavvrr {
 
         assertThat(reduced).isEqualTo("one, two, three");
 
-        String mkString = src.mkString(", ");
-        assertThat(reduced).isEqualTo(mkString);
+        String reduced2 = src.mkString(", ");
+        assertThat(reduced).isEqualTo(reduced2);
+    }
 
+    @Test
+    public void testVavrReduce2() {
+        List<Integer> src = List(1, 2, 3, 4, 5);
+
+        assertThat(src.sum()).isEqualTo(15L);
+        assertThat(src.average()).isEqualTo(3.0);
+    }
+
+    @Test
+    public void testVavrSort(){
+        List<Integer> src = List(3, 1, 5, 4, 2);
+
+        List<Integer> sorted = src.sorted();
+
+        println(sorted);
+
+        assertThat(sorted).isEqualTo(List(1, 2, 3, 4, 5));
     }
 
     @Test
@@ -82,5 +106,49 @@ public class Vvaavvrr {
         java.util.List<String> view = vavr.asJava();
 
         assertThat(java).isEqualTo(view);
+    }
+
+    @Test
+    public void testInterop3() {
+        List<String> src = List("one", "two", "three");
+
+        Iterable<String> iterable = src;
+
+        for(String e : src){
+            println(e);
+        }
+    }
+
+    @Test
+    public void testSlice(){
+        List<String> src = List("one", "two", "three", "four", "five");
+        List<String> slice = src.slice(2, 4);
+
+        println(slice);
+
+        assertThat(slice).containsExactly("three", "four");
+    }
+
+    @Test
+    public void testGroupBy(){
+        List<String> src = List("one", "two", "three", "four", "five");
+        final Map<Integer, List<String>> groups = src.groupBy(String::length);
+
+        println(groups);
+    }
+
+    @Test
+    public void testJSON() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new VavrModule());
+        TypeReference<List<Integer>> typeReference = new TypeReference<List<Integer>>() {};
+
+        String json = "[1, 2, 3, 4]";
+
+        List<Integer> list = mapper.readValue(json, typeReference);
+
+        println(list);
+
+        assertThat(list).containsExactly(1,2,3,4);
     }
 }

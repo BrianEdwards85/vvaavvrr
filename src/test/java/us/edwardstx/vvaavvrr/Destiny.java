@@ -6,8 +6,11 @@ import io.vavr.concurrent.Future;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.Random;
 import java.util.UUID;
+import com.talanlabs.avatargenerator.Avatar;
+import com.talanlabs.avatargenerator.SquareAvatar;
 
 import static io.vavr.API.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -104,13 +107,12 @@ public class Destiny {
         assertThat(theFutureIsFail.isCompleted()).isFalse();
 
         Future<String> mappedFuture = theFutureIsFail.map(s -> "[" + s + "]");
-
         Future<String> orElse = mappedFuture.orElse(Future("I failed :("));
         orElse.await();
 
         String r = orElse.get();
-        assertThat(r).isEqualTo("I failed :(");
         println(r);
+        assertThat(r).isEqualTo("I failed :(");
     }
 
     @Test
@@ -144,7 +146,5 @@ public class Destiny {
         String result = recover.get();
         assertThat(result).isEqualTo("I failed: Blank string not allowed");
         println(result);
-
     }
-
 }

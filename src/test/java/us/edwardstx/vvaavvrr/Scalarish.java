@@ -1,13 +1,8 @@
 package us.edwardstx.vvaavvrr;
 
 import com.google.common.base.Function;
-import io.vavr.Function1;
-import io.vavr.Function2;
-import io.vavr.Tuple2;
-import io.vavr.Tuple3;
-import io.vavr.collection.List;
-import io.vavr.collection.Map;
-import io.vavr.collection.Stream;
+import io.vavr.*;
+import io.vavr.collection.*;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import org.junit.Test;
@@ -15,8 +10,6 @@ import org.junit.Test;
 import static io.vavr.API.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
-
-import java.util.Map.Entry;
 
 public class Scalarish {
 
@@ -36,9 +29,9 @@ public class Scalarish {
 
         assertThat(s).isEqualTo("One");
 
-        Entry<Integer, String> integerStringEntry = one.toEntry();
+    //    Entry<Integer, String> integerStringEntry = one.toEntry();
 
-        Tuple3<Integer,String,Boolean> append = one.append(true);
+    //    Tuple3<Integer,String,Boolean> append = one.append(true);
     }
 
     @Test
@@ -54,7 +47,6 @@ public class Scalarish {
     @Test
     public void testPartialFunctionVavr(){
         Function2<Integer, Integer, Integer> max = Math::max;
-
         Function1<Integer,Integer> zeroOrGreater = max.apply(0);
 
         assertThat(zeroOrGreater.apply(4)).isEqualTo(4);
@@ -108,7 +100,6 @@ public class Scalarish {
         Option<Long> some = Some(3L);
         List<Object> added3 = list.appendAll(some);
         assertThat(added3).containsExactly(1L, 3L);
-
     }
 
     @Test
@@ -137,7 +128,7 @@ public class Scalarish {
 
     @Test
     public void inifinitMap(){
-        Map<Integer, String> map = Map(Tuple(1, "one"), Tuple(2, "two"), Tuple(3, "three"),
+        Map<Integer, String> map = HashMap.ofEntries(Tuple(1, "one"), Tuple(2, "two"), Tuple(3, "three"),
                 Tuple(4, "four"), Tuple(5, "five"), Tuple(6, "six"), Tuple(7, "seven"), Tuple(8, "eight"),
                 Tuple(9, "nine"), Tuple(10, "ten"), Tuple(11, "eleven"), Tuple(12, "tweleve"), Tuple(13, "thirteen"));
         assertThat(map.keySet()).containsAll(Stream.from(1).take(12));
