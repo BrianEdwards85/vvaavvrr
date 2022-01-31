@@ -6,11 +6,8 @@ import io.vavr.concurrent.Future;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.Random;
 import java.util.UUID;
-import com.talanlabs.avatargenerator.Avatar;
-import com.talanlabs.avatargenerator.SquareAvatar;
 
 import static io.vavr.API.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,7 +50,7 @@ public class Destiny {
         println(f1.get());
     }
 
-    public Future<String> capitilize(String string) {
+    public Future<String> capitalize(String string) {
         return Future(() -> {
             Thread.sleep(delay());
             if (StringUtils.isAllBlank(string)) {
@@ -67,7 +64,7 @@ public class Destiny {
     public void flatMapFuture() {
         Future<String> f1 = hardWork()
                 .map(s -> s.substring(0, 6))
-                .flatMap(this::capitilize);
+                .flatMap(this::capitalize);
         println("Returned");
         assertThat(f1.isCompleted()).isFalse();
         f1.await();
@@ -81,7 +78,7 @@ public class Destiny {
     @Test
     public void sequenceFuture() {
         List<String> list = List("ab", "bc", "cd", "de");
-        List<Future<String>> listOfFututres = list.map(this::capitilize);
+        List<Future<String>> listOfFututres = list.map(this::capitalize);
         listOfFututres.forEach(f -> assertThat(!f.isCompleted()));
         Future<Seq<String>> futureOfList = Future.sequence(listOfFututres);
         futureOfList.await();
@@ -93,7 +90,7 @@ public class Destiny {
 
     @Test
     public void failureIsAlwaysAnOption() {
-        Future<String> theFutureIsFail = capitilize("");
+        Future<String> theFutureIsFail = capitalize("");
         println("Returned");
         assertThat(theFutureIsFail.isCompleted()).isFalse();
         theFutureIsFail.await();
@@ -102,7 +99,7 @@ public class Destiny {
 
     @Test
     public void butYouShouldAlwaysRecover(){
-        Future<String> theFutureIsFail = capitilize("");
+        Future<String> theFutureIsFail = capitalize(""); //below
         println("Returned");
         assertThat(theFutureIsFail.isCompleted()).isFalse();
 
@@ -117,7 +114,7 @@ public class Destiny {
 
     @Test
     public void successIsBetter(){
-        Future<String> theFutureIsNotFail = capitilize("abcde");
+        Future<String> theFutureIsNotFail = capitalize("abcde");
         println("Returned");
         assertThat(theFutureIsNotFail.isCompleted()).isFalse();
 
@@ -133,7 +130,7 @@ public class Destiny {
 
     @Test
     public void explainYourself(){
-        Future<String> theFutureIsFail = capitilize("");
+        Future<String> theFutureIsFail = capitalize("");
         println("Returned");
         assertThat(theFutureIsFail.isCompleted()).isFalse();
 

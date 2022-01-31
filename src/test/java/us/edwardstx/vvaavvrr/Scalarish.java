@@ -29,9 +29,6 @@ public class Scalarish {
 
         assertThat(s).isEqualTo("One");
 
-    //    Entry<Integer, String> integerStringEntry = one.toEntry();
-
-    //    Tuple3<Integer,String,Boolean> append = one.append(true);
     }
 
     @Test
@@ -108,26 +105,28 @@ public class Scalarish {
                 .iterate(3L, i -> i + 3)
                 .take(25).toList();
 
-        List<Option<Long>> map = numbers.map(n -> {
+        println(numbers);
+
+        List<Option<Long>> mappedList = numbers.map(n -> {
             if (n % 2 == 0)
                 return Option(n);
             else
                 return Option.none();
         });
 
-        println(map.mkString(", "));
+        println(mappedList.mkString(", "));
 
-        List<Long> filterMap = map.filter(Option::isDefined).map(Option::get);
+        List<Long> filterMap = mappedList.filter(Option::isDefined).map(Option::get);
 
         println(filterMap.mkString(", "));
 
-        List<Long> flatMap = map.flatMap(Function1.identity());
+        List<Long> flatMap = mappedList.flatMap(Function1.identity());
 
         println(flatMap.mkString(", "));
     }
 
     @Test
-    public void inifinitMap(){
+    public void inifiniteMap(){
         Map<Integer, String> map = HashMap.ofEntries(Tuple(1, "one"), Tuple(2, "two"), Tuple(3, "three"),
                 Tuple(4, "four"), Tuple(5, "five"), Tuple(6, "six"), Tuple(7, "seven"), Tuple(8, "eight"),
                 Tuple(9, "nine"), Tuple(10, "ten"), Tuple(11, "eleven"), Tuple(12, "tweleve"), Tuple(13, "thirteen"));

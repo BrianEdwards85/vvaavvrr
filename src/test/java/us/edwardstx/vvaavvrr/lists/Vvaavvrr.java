@@ -62,7 +62,7 @@ public class Vvaavvrr {
         List<Integer> src = List(1, 2, 3, 4, 5);
 
         assertThat(src.sum()).isEqualTo(15L);
-        assertThat(src.average()).isEqualTo(3.0);
+        assertThat(src.average().get()).isEqualTo(3.0);
     }
 
     @Test
