@@ -51,14 +51,6 @@ public class Scalarish {
         assertThat(zeroOrGreater.apply(-2)).isEqualTo(0);
     }
 
-    public static Option<Long> optionValue(Long in){
-        println("optionValue: " + in);
-        if(in % 4 == 0){
-            return Option(in);
-        }
-        return None();
-    }
-
     @Test
     public void testVavrOption(){
         Option<Long> o1 = optionValue(1L)
@@ -71,6 +63,14 @@ public class Scalarish {
                 .orElse(() -> optionValue(5L));
 
         println("O2: " + o2.getOrElse(0L));
+    }
+
+    public static Option<Long> optionValue(Long in){
+        println("optionValue: " + in);
+        if(in % 4 == 0){
+            return Option(in);
+        }
+        return None();
     }
 
     @Test
@@ -123,6 +123,18 @@ public class Scalarish {
         List<Long> flatMap = mappedList.flatMap(Function1.identity());
 
         println(flatMap.mkString(", "));
+    }
+
+    @Test
+    public void testVavrAppendOptionalsToList(){
+        final List<Long> longs = Stream.from(0L)
+                .take(100)
+                .toList()
+                .map(Scalarish::optionValue)
+                .flatMap(Function1.identity());
+
+        println(longs);
+
     }
 
     @Test

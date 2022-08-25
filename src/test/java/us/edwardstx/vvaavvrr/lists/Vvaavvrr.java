@@ -71,6 +71,7 @@ public class Vvaavvrr {
 
         List<Integer> sorted = src.sorted();
 
+        println(src);
         println(sorted);
 
         assertThat(sorted).isEqualTo(List(1, 2, 3, 4, 5));

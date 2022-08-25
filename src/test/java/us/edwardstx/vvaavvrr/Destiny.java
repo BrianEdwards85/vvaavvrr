@@ -20,16 +20,17 @@ public class Destiny {
         return (random.nextInt(4) + 1) * 400 + random.nextInt(600) + 1L;
     }
 
-    public Future<String> hardWork() {
-        return Future(() -> {
-            Thread.sleep(delay());
-            return UUID.randomUUID().toString();
-        });
+    public static String hardWork() throws InterruptedException {
+        Thread.sleep(delay());
+        return UUID.randomUUID().toString();
+    }
+    public static Future<String> hardWorkFuture() {
+        return Future(Destiny::hardWork);
     }
 
     @Test
     public void simpleFuture() {
-        Future<String> f1 = hardWork();
+        Future<String> f1 = hardWorkFuture();
         println("Returned");
         assertThat(f1.isCompleted()).isFalse();
         f1.await();
@@ -40,7 +41,7 @@ public class Destiny {
 
     @Test
     public void mapFuture() {
-        Future<String> f1 = hardWork().map(s -> s.substring(0, 6));
+        Future<String> f1 = hardWorkFuture().map(s -> s.substring(0, 6));
         println("Returned");
         assertThat(f1.isCompleted()).isFalse();
         f1.await();
@@ -62,7 +63,7 @@ public class Destiny {
 
     @Test
     public void flatMapFuture() {
-        Future<String> f1 = hardWork()
+        Future<String> f1 = hardWorkFuture()
                 .map(s -> s.substring(0, 6))
                 .flatMap(this::capitalize);
         println("Returned");
@@ -80,7 +81,8 @@ public class Destiny {
         List<String> list = List("ab", "bc", "cd", "de");
         List<Future<String>> listOfFututres = list.map(this::capitalize);
         listOfFututres.forEach(f -> assertThat(!f.isCompleted()));
-        Future<Seq<String>> futureOfList = Future.sequence(listOfFututres);
+        Future<Seq<String>> futureOfSeq = Future.sequence(listOfFututres);
+        final Future<List<String>> futureOfList = futureOfSeq.map(List::ofAll);
         futureOfList.await();
         listOfFututres.forEach(f -> assertThat(f.isCompleted()));
         Seq<String> strings = futureOfList.get();
